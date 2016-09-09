@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>list</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script type="text/javascript" src="/javascripts/jquery.js"></script>
+  </head>
+  <body>
+    <% if (users.length) { %>
+      <ul>
+        <% users.forEach(function(user){ %>
+          <li>id: <%= user.userid %> password: <%= user.password %> <a href='del/<%= user._id %>'>删除</a></li>
+        <% }) %>
+      </ul>
+    <% } %>
+  </body>
+  <script>
+    $(function(){
+      
+    })
+  </script>
+</html>
