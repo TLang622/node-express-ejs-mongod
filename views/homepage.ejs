@@ -3,19 +3,49 @@
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script type="text/javascript" src="/javascripts/jquery.js"></script>
   </head>
   <body>
     <h1>Hello World</h1>
-    <p>Welcome to <%= title %></p>
+    <p>Welcome <%= userData.userid %></p>
     <p><a href="logout">登出</a></p>
-    <form action="modify" method="post">
+    <form>
     	<h3>修改密码</h3>
 	    <p>
 	    	<span>新密码:</span>
 	    	<br>
 	    	<input id="password" name="password" type="password">
 	    </p>
-	    <p><input type="submit" value="submit"></p>
+	    <p><input id="btn-modify" type="submit" value="submit"></p>
     </form>
+    <script>
+      $(function() {
+        //console.log('<%= userData._id %>');
+        var id = '<%= userData._id %>';
+        if(!id){
+          window.location.href = '/'
+        };
+        $('#btn-modify').click(function() {
+          var data = {};
+          data.password = $('#password').val();
+          $.ajax({
+                  type: 'POST',
+                  url: 'modify',
+                  data: data,
+                  success: function(data) {
+                    console.log(data)
+                    if(data.status == 1){
+                      alert('修改成功')
+                    }else {
+                      alert('修改失败')
+                    }
+                  },
+                  error: function(XMLHttpRequest, textStatus, errorThrown) {
+
+                  }
+           })
+        })
+      })
+    </script>
   </body>
 </html>

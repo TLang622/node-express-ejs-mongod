@@ -3,11 +3,12 @@
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script type="text/javascript" src="/javascripts/jquery.js"></script>
   </head>
   <body>
     <h1>Hello World</h1>
     <p>Welcome to <%= title %></p>
-    <form action="add" method="post">
+    <form>
 	    <p>
 	    	<span>userId:</span>
 	    	<br>
@@ -18,7 +19,32 @@
 	    	<br>
 	    	<input id="password" name="password" type="password">
 	    </p>
-	    <p><input type="submit" value="submit"></p>
+	    <p><input id="add" type="submit" value="submit"></p>
     </form>
+    <p><a href="/">返回index</a></p>
+	<script>
+		$(function(){
+			$('#add').click(function() {
+				var data = {};
+				data.userid = $('#userid').val();
+				data.password = $('#password').val();
+				$.ajax({
+                  type: 'POST',
+                  url: 'add',
+                  data: data,
+                  success: function(data) {
+                      if(data.status == 1){
+                        alert('新增成功')
+                      }else{
+                        alert('新增失败')
+                      }
+                  },
+                  error: function(XMLHttpRequest, textStatus, errorThrown) {
+
+                  }
+                })
+			})
+		})
+	</script>
   </body>
 </html>

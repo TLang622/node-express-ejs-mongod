@@ -4,19 +4,75 @@
     <title>list</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <script type="text/javascript" src="/javascripts/jquery.js"></script>
+    <script type="text/javascript" src="/javascripts/ejs.production.js"></script>
   </head>
-  <body>
+  <body id="aaa">
     <% if (users.length) { %>
       <ul>
         <% users.forEach(function(user){ %>
-          <li>id: <%= user.userid %> password: <%= user.password %> <a href='del/<%= user._id %>'>删除</a></li>
+          <li>id: <%= user.userid %> password: <%= user.password %> <a class="btn-delete" value='<%= user._id %>' href="javascript:;">删除</a></li>
         <% }) %>
       </ul>
     <% } %>
+      <p>
+        <span>userId:</span>
+        <br>
+        <input id="userid" name="userid" type="text">
+      </p>
+      <button id="btn-del">删除</button>
+      <p><a href="/">返回index</a></p>
+      
   </body>
   <script>
     $(function(){
-      
+      function getUsers(){
+        $.ajax({
+            type: 'GET',
+            url: 'getUsers',
+            success: function(data) {
+              users = data.data; //这里users前面不能加var,不然render获取不到
+              var html = new EJS({url:'/list.ejs'}).render(users); //实际上这里应该用一个html页面来引用ejs模版的
+              document.getElementById('aaa').innerHTML = html;
+
+              $('#btn-del').click(function(){
+                var data = {};
+                data.userid = $('#userid').val();
+                $.ajax({
+                  type: 'POST',
+                  url: 'del',
+                  data: data,
+                  success: function(data) {
+                      window.location.href = '/list'
+                  },
+                  error: function(XMLHttpRequest, textStatus, errorThrown) {
+
+                  }
+                })
+              })
+
+              $('.btn-delete').click(function() {
+                console.log($(this).attr('value'));
+                var param = $(this).attr('value');
+                $.ajax({
+                  type: 'GET',
+                  url: 'del/' + param,
+                  success: function(data) {
+                      window.location.href = '/list'
+                  },
+                  error: function(XMLHttpRequest, textStatus, errorThrown) {
+
+                  }
+                })
+              })
+
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+
+            }
+          })
+      }
+      getUsers();
+       
     })
   </script>
 </html>
